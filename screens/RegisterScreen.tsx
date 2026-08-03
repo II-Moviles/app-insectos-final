@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
-  Image,
+  StyleSheet,
 } from "react-native";
 
-import * as ImagePicker from "expo-image-picker";
+import { Ionicons } from "@expo/vector-icons";
 
 import { registrarUsuario } from "../Services/auth";
 
@@ -18,217 +18,434 @@ interface Props {
   navigation: any;
 }
 
-export default function RegisterScreen({ navigation }: Props) {
+interface Avatar {
+  id: string;
+  icono: string;
+}
+
+export default function RegisterScreen({
+  navigation,
+}: Props) {
   const [nick, setNick] = useState("");
-
   const [edad, setEdad] = useState("");
-
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
-
   const [confirmar, setConfirmar] = useState("");
 
-  const [foto, setFoto] = useState("");
+  // Avatar seleccionado por defecto
+  const [avatar, setAvatar] = useState("avatar1");
 
-  const seleccionarImagen = async () => {
-    const permiso = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const avatares: Avatar[] = [
+    {
+      id: "avatar1",
+      icono: "person-circle",
+    },
+    {
+      id: "avatar2",
+      icono: "happy",
+    },
+    {
+      id: "avatar3",
+      icono: "bug",
+    },
+    {
+      id: "avatar4",
+      icono: "paw",
+    },
+    {
+      id: "avatar5",
+      icono: "star",
+    },
+    {
+      id: "avatar6",
+      icono: "rocket",
+    },
+  ];
 
-    if (!permiso.granted) {
-      Alert.alert("Permiso requerido", "Debe permitir el acceso a la galería.");
+  // Obtener icono del avatar seleccionado
+  const obtenerIcono = () => {
+    const seleccionado = avatares.find(
+      (item) => item.id === avatar
+    );
 
-      return;
-    }
-
-    const resultado = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.8,
-    });
-
-    if (!resultado.canceled) {
-      setFoto(resultado.assets[0].uri);
-    }
+    return seleccionado?.icono || "person-circle";
   };
 
+  // ===============================
+  // REGISTRAR USUARIO
+  // ===============================
+
   const registrar = async () => {
-    if (!nick || !edad || !email || !password || !confirmar) {
-      Alert.alert("Error", "Complete todos los campos.");
+    // Validar campos
+    if (
+      !nick.trim() ||
+      !edad.trim() ||
+      !email.trim() ||
+      !password.trim() ||
+      !confirmar.trim()
+    ) {
+      Alert.alert(
+        "Error",
+        "Complete todos los campos."
+      );
       return;
     }
 
-    if (foto === "") {
-      Alert.alert("Error", "Seleccione una foto.");
+    // Validar edad
+    const edadNumero = Number(edad);
+
+    if (
+      isNaN(edadNumero) ||
+      edadNumero <= 0 ||
+      edadNumero > 120
+    ) {
+      Alert.alert(
+        "Error",
+        "Ingrese una edad válida."
+      );
       return;
     }
 
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Validar correo
+    const regex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!regex.test(email)) {
-      Alert.alert("Error", "Correo electrónico inválido.");
+    if (!regex.test(email.trim())) {
+      Alert.alert(
+        "Error",
+        "Ingrese un correo electrónico válido."
+      );
       return;
     }
 
+    // Validar contraseña
     if (password.length < 6) {
-      Alert.alert("Error", "La contraseña debe tener al menos 6 caracteres.");
+      Alert.alert(
+        "Error",
+        "La contraseña debe tener al menos 6 caracteres."
+      );
       return;
     }
 
+    // Confirmar contraseña
     if (password !== confirmar) {
-      Alert.alert("Error", "Las contraseñas no coinciden.");
+      Alert.alert(
+        "Error",
+        "Las contraseñas no coinciden."
+      );
       return;
     }
 
-    const respuesta = await registrarUsuario(
-      email,
-      password,
-      nick,
-      Number(edad),
-      foto,
-    );
-    if (!respuesta.success) {
-      Alert.alert("Registro", respuesta.message);
-      return;
-    }
+    try {
+      /*
+       * IMPORTANTE:
+       * No se solicita ni se selecciona ninguna foto.
+       *
+       * El avatar se guarda mediante su ID:
+       * avatar1, avatar2, avatar3, etc.
+       */
 
-    Alert.alert("Éxito", "Usuario registrado correctamente.", [
-      {
-        text: "Aceptar",
-        onPress: () => navigation.goBack(),
-      },
-    ]);
+      const respuesta = await registrarUsuario(
+        email.trim(),
+        password.trim(),
+        nick.trim(),
+        edadNumero,
+        avatar
+      );
+
+      if (!respuesta.success) {
+        Alert.alert(
+          "Registro",
+          respuesta.message
+        );
+        return;
+      }
+
+      Alert.alert(
+        "Registro exitoso",
+        "Usuario registrado correctamente.",
+        [
+          {
+            text: "Aceptar",
+            onPress: () => navigation.goBack(),
+          },
+        ]
+      );
+    } catch (error) {
+      console.log(
+        "ERROR REGISTRANDO:",
+        error
+      );
+
+      Alert.alert(
+        "Error",
+        "No se pudo registrar el usuario."
+      );
+    }
   };
 
   return (
     <ScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-        justifyContent: "center",
-        padding: 25,
-        backgroundColor: "#101820",
-      }}
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
     >
-      <Text
-        style={{
-          color: "white",
-          fontSize: 32,
-          fontWeight: "bold",
-          textAlign: "center",
-          marginBottom: 30,
-        }}
-      >
-        Registro
+      {/* ===============================
+          TÍTULO
+      =============================== */}
+
+      <Text style={styles.title}>
+        Crear cuenta
       </Text>
 
+      {/* ===============================
+          AVATAR PRINCIPAL
+      =============================== */}
+
+      <View style={styles.avatarPrincipal}>
+        <Ionicons
+          name={obtenerIcono() as any}
+          size={85}
+          color="#FFFFFF"
+        />
+      </View>
+
+      <Text style={styles.avatarTitle}>
+        Selecciona tu avatar
+      </Text>
+
+      {/* ===============================
+          AVATARES
+      =============================== */}
+
+      <View style={styles.avatarGrid}>
+        {avatares.map((item) => (
+          <TouchableOpacity
+            key={item.id}
+            onPress={() => setAvatar(item.id)}
+            style={[
+              styles.avatarButton,
+              avatar === item.id &&
+                styles.avatarSeleccionado,
+            ]}
+          >
+            <Ionicons
+              name={item.icono as any}
+              size={40}
+              color="#FFFFFF"
+            />
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <Text style={styles.avatarActual}>
+        Avatar seleccionado: {avatar}
+      </Text>
+
+      {/* ===============================
+          NICKNAME
+      =============================== */}
+
       <TextInput
-        placeholder="Nick"
-        placeholderTextColor="#999"
+        placeholder="Nickname"
+        placeholderTextColor="#999999"
         value={nick}
         onChangeText={setNick}
-        style={estilo}
+        style={styles.input}
+        autoCapitalize="none"
       />
+
+      {/* ===============================
+          EDAD
+      =============================== */}
 
       <TextInput
         placeholder="Edad"
-        placeholderTextColor="#999"
+        placeholderTextColor="#999999"
         keyboardType="numeric"
         value={edad}
         onChangeText={setEdad}
-        style={estilo}
+        style={styles.input}
       />
+
+      {/* ===============================
+          CORREO
+      =============================== */}
 
       <TextInput
         placeholder="Correo electrónico"
-        placeholderTextColor="#999"
+        placeholderTextColor="#999999"
         autoCapitalize="none"
         keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
-        style={estilo}
+        style={styles.input}
       />
+
+      {/* ===============================
+          CONTRASEÑA
+      =============================== */}
 
       <TextInput
         placeholder="Contraseña"
-        placeholderTextColor="#999"
+        placeholderTextColor="#999999"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
-        style={estilo}
+        style={styles.input}
       />
+
+      {/* ===============================
+          CONFIRMAR CONTRASEÑA
+      =============================== */}
 
       <TextInput
         placeholder="Confirmar contraseña"
-        placeholderTextColor="#999"
+        placeholderTextColor="#999999"
         secureTextEntry
         value={confirmar}
         onChangeText={setConfirmar}
-        style={estilo}
+        style={styles.input}
       />
 
+      {/* ===============================
+          REGISTRARSE
+      =============================== */}
+
       <TouchableOpacity
-        style={{
-          backgroundColor: "#3498DB",
-          padding: 15,
-          borderRadius: 10,
-          alignItems: "center",
-          marginTop: 10,
-          marginBottom: 20,
-        }}
-        onPress={seleccionarImagen}
+        style={styles.registerButton}
+        onPress={registrar}
       >
-        <Text
-          style={{
-            color: "#FFFFFF",
-            fontWeight: "bold",
-            fontSize: 16,
-          }}
-        >
-          Seleccionar foto
+        <Ionicons
+          name="person-add"
+          size={22}
+          color="#FFFFFF"
+        />
+
+        <Text style={styles.registerText}>
+          Registrarse
         </Text>
       </TouchableOpacity>
 
-      {foto !== "" && (
-        <Image
-          source={{ uri: foto }}
-          style={{
-            width: 150,
-            height: 150,
-            borderRadius: 75,
-            alignSelf: "center",
-            marginBottom: 20,
-          }}
-        />
-      )}
+      {/* ===============================
+          VOLVER
+      =============================== */}
 
       <TouchableOpacity
-        style={{
-          backgroundColor: "#27AE60",
-          padding: 15,
-          borderRadius: 10,
-          alignItems: "center",
-          marginTop: 10,
-        }}
-        onPress={registrar}
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
       >
-        <Text
-          style={{
-            color: "white",
-            fontWeight: "bold",
-            fontSize: 18,
-          }}
-        >
-          Registrarse
+        <Text style={styles.backText}>
+          Volver al inicio de sesión
         </Text>
       </TouchableOpacity>
     </ScrollView>
   );
 }
 
-const estilo = {
-  backgroundColor: "#FFFFFF",
-  padding: 15,
-  borderRadius: 10,
-  marginBottom: 15,
-  fontSize: 16,
-};
+// ===============================
+// ESTILOS
+// ===============================
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    justifyContent: "center",
+    padding: 25,
+    backgroundColor: "#101820",
+  },
+
+  title: {
+    color: "#FFFFFF",
+    fontSize: 32,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+
+  avatarPrincipal: {
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    backgroundColor: "#27AE60",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    marginBottom: 15,
+  },
+
+  avatarTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 15,
+  },
+
+  avatarGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 12,
+    marginBottom: 10,
+  },
+
+  avatarButton: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: "#34495E",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "transparent",
+  },
+
+  avatarSeleccionado: {
+    backgroundColor: "#27AE60",
+    borderColor: "#FFFFFF",
+    borderWidth: 3,
+  },
+
+  avatarActual: {
+    color: "#AAAAAA",
+    textAlign: "center",
+    marginBottom: 20,
+    fontSize: 14,
+  },
+
+  input: {
+    backgroundColor: "#FFFFFF",
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 15,
+    fontSize: 16,
+  },
+
+  registerButton: {
+    backgroundColor: "#27AE60",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    marginTop: 10,
+  },
+
+  registerText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    fontSize: 18,
+    marginLeft: 8,
+  },
+
+  backButton: {
+    alignItems: "center",
+    marginTop: 20,
+    marginBottom: 20,
+  },
+
+  backText: {
+    color: "#3498DB",
+    fontSize: 16,
+  },
+});

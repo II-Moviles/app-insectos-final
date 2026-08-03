@@ -96,11 +96,11 @@ export default function HomeScreen({ navigation }: Props) {
 
       const finalizarJuego = async () => {
         if (jugador !== "") {
-          await guardarPuntaje(
-            jugador,
-
-            score,
-          );
+await guardarPuntaje(
+  jugador,
+  score,
+  capturas,
+);
         }
 
         await AsyncStorage.setItem(

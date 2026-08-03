@@ -1,5 +1,9 @@
 import { supabase } from "./supabaseClient";
 
+// ==========================================
+// GUARDAR PUNTAJE
+// ==========================================
+
 export async function guardarPuntaje(
   usuario: string,
   puntaje: number,
@@ -13,7 +17,7 @@ export async function guardarPuntaje(
         puntaje: puntaje,
         capturas: capturas,
         partidas: 1,
-        fecha: new Date(),
+        fecha: new Date().toISOString(),
       },
     ])
     .select();
@@ -28,6 +32,10 @@ export async function guardarPuntaje(
 
   return true;
 }
+
+// ==========================================
+// OBTENER MEJORES PUNTAJES
+// ==========================================
 
 export const obtenerPuntajes = async () => {
   const { data, error } = await supabase
@@ -47,10 +55,14 @@ export const obtenerPuntajes = async () => {
   return data || [];
 };
 
+// ==========================================
+// OBTENER ESTADÍSTICAS DEL JUGADOR
+// ==========================================
+
 export const obtenerEstadisticasJugador = async (usuario: string) => {
   const { data, error } = await supabase
     .from("puntajes")
-    .select("*")
+    .select("puntaje, capturas, partidas")
     .eq("usuario", usuario);
 
   if (error) {
@@ -58,24 +70,31 @@ export const obtenerEstadisticasJugador = async (usuario: string) => {
 
     return {
       partidas: 0,
-
       mejorPuntaje: 0,
+      totalCapturas: 0,
     };
   }
 
   if (!data || data.length === 0) {
     return {
       partidas: 0,
-
       mejorPuntaje: 0,
+      totalCapturas: 0,
     };
   }
 
-  const mejor = Math.max(...data.map((item) => item.puntaje));
+  const mejorPuntaje = Math.max(
+    ...data.map((item) => Number(item.puntaje) || 0),
+  );
+
+  const totalCapturas = data.reduce(
+    (total, item) => total + (Number(item.capturas) || 0),
+    0,
+  );
 
   return {
     partidas: data.length,
-
-    mejorPuntaje: mejor,
+    mejorPuntaje: mejorPuntaje,
+    totalCapturas: totalCapturas,
   };
 };
