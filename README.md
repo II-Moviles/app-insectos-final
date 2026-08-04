@@ -1,201 +1,98 @@
-# 📱 Caza Insectos
+# 🐞 Caza Insectos
 
-Juego móvil desarrollado con **React Native y Expo**, donde el usuario debe capturar insectos virtuales que aparecen en pantalla. Los puntajes obtenidos se almacenan en una base de datos externa utilizando **Supabase**.
+Aplicación móvil desarrollada como proyecto final de **Aplicaciones Móviles II**, utilizando **React Native, Expo y TypeScript**.
 
-El proyecto fue desarrollado para la asignatura **Aplicaciones Móviles II**, aplicando conceptos de desarrollo móvil, navegación, manejo de estados, autenticación de usuarios y almacenamiento en la nube.
+El proyecto consiste en un videojuego interactivo en el que el usuario debe capturar insectos para obtener puntos. La aplicación también incorpora autenticación, perfiles de usuario, clasificación de puntuaciones y almacenamiento de fotografías en la nube.
 
----
+## 🚀 Tecnologías utilizadas
 
-# 🎯 Objetivo
+* React Native
+* Expo
+* TypeScript
+* React Navigation
+* Supabase
+* Supabase Authentication
+* Supabase Database
+* Supabase Storage
+* Expo Image Picker
+* Expo Application Services (EAS)
 
-Desarrollar una aplicación móvil interactiva utilizando React Native, implementando componentes visuales, navegación entre pantallas, lógica de juego, autenticación de usuarios y conexión con servicios externos.
+## 📱 Funcionalidades
 
-El objetivo principal del juego es capturar insectos durante un tiempo determinado, acumulando puntos y permitiendo visualizar los mejores resultados de los jugadores.
+* Registro de usuarios.
+* Inicio y cierre de sesión.
+* Selección de avatar.
+* Perfil de usuario.
+* Visualización de estadísticas.
+* Juego de captura de insectos.
+* Incremento de puntuación durante la partida.
+* Guardado de puntuaciones.
+* Clasificación de jugadores ordenada por puntuación.
+* Selección de fotografía desde la galería.
+* Captura de fotografía mediante la cámara.
+* Actualización de la fotografía de perfil.
+* Almacenamiento de fotografías mediante Supabase Storage.
+* Persistencia de la información del usuario.
 
----
+## 🎮 Funcionamiento
 
-# 📝 Descripción del Proyecto
+El usuario inicia registrándose en la aplicación y posteriormente puede iniciar sesión. Una vez autenticado, puede acceder al juego y capturar insectos para obtener puntos.
 
-La aplicación denominada **Caza Insectos** permite al usuario registrarse, iniciar sesión y participar en un juego donde debe capturar insectos que aparecen en diferentes posiciones de la pantalla.
+Al finalizar la partida, la puntuación se almacena y puede consultarse en la pantalla de clasificación. Desde el perfil, el usuario puede consultar sus datos y estadísticas, además de modificar su fotografía utilizando la galería o la cámara del dispositivo.
 
-La aplicación cuenta con:
+## ☁️ Supabase
 
-- Registro de usuarios.
-- Inicio de sesión.
-- Perfil personalizado.
-- Juego interactivo.
-- Sistema de puntuación.
-- Ranking de jugadores.
-- Almacenamiento de datos mediante Supabase.
+Utilicé Supabase como servicio backend para gestionar:
 
-Durante el desarrollo se utilizaron componentes principales de React Native:
+* Autenticación de usuarios.
+* Información de los perfiles.
+* Puntuaciones de los jugadores.
+* Fotografías de perfil mediante Supabase Storage.
 
-- View
-- Text
-- Image
-- TextInput
-- FlatList
-- TouchableOpacity
-- ScrollView
-- Animated
-- StyleSheet
+## 📦 Generación del APK
 
----
+Para generar la versión ejecutable de Android utilicé **Expo Application Services (EAS)**.
 
-# 📚 Fundamentación Teórica
+```bash
+npx expo-doctor
+eas login
+eas whoami
+eas build -p android --profile preview
+```
 
-## React Native
+Antes de generar el APK verifiqué que el proyecto no presentara errores mediante `expo-doctor`.
 
-React Native es un framework desarrollado por Meta que permite crear aplicaciones móviles multiplataforma utilizando JavaScript o TypeScript.
+La compilación fue realizada mediante los servidores de Expo y se configuraron las credenciales necesarias para Android.
 
-Su arquitectura basada en componentes permite desarrollar interfaces reutilizables y mantener una mejor organización del código.
+## 🔗 Compilación
 
----
+Proyecto publicado en Expo:
 
-## Expo
+https://expo.dev/accounts/fernando6489/projects/app-insectos/builds/4b625341-53ed-46c4-b9da-fc178a3d85f2
 
-Expo es una plataforma utilizada para facilitar el desarrollo y pruebas de aplicaciones creadas con React Native.
+## ✅ Pruebas realizadas
 
-Permite acceder fácilmente a funcionalidades del dispositivo como:
+Se verificaron las principales funcionalidades de la aplicación:
 
-- Galería de imágenes.
-- Almacenamiento.
-- Cámara.
-- Ejecución en dispositivos físicos.
+* Registro e inicio de sesión.
+* Selección de avatar.
+* Acceso y funcionamiento del juego.
+* Captura de insectos.
+* Incremento y almacenamiento de puntuaciones.
+* Visualización de clasificación.
+* Consulta de perfil y estadísticas.
+* Selección de fotografía desde galería.
+* Captura mediante cámara.
+* Actualización y almacenamiento de fotografía.
+* Cierre y nuevo inicio de sesión.
 
----
+## 🎯 Objetivo
 
-## Supabase
+Con este proyecto apliqué de manera práctica los conocimientos adquiridos durante mi formación en desarrollo de aplicaciones móviles, integrando interfaces, navegación, autenticación, almacenamiento en la nube, interacción con el dispositivo y generación de aplicaciones para Android.
 
-Supabase es una plataforma Backend como Servicio (BaaS) utilizada en el proyecto para administrar información externa.
+## 👨‍💻 Autor
 
-Fue utilizada para:
+**Wladimir Vega Herrera**
 
-- Autenticación de usuarios.
-- Base de datos.
-- Almacenamiento de imágenes.
-- Registro de puntajes.
-
----
-
-# 🔐 Segunda Parte: Autenticación y Gestión de Usuarios
-
-En esta segunda fase del proyecto se implementó un sistema completo de usuarios para mejorar la experiencia del jugador.
-
-Cada usuario puede crear una cuenta, ingresar a la aplicación y visualizar información personalizada.
-
----
-
-# 🔑 Autenticación de Usuarios
-
-La autenticación permite controlar el acceso a la aplicación mediante credenciales personales.
-
-Se implementaron las siguientes funcionalidades:
-
-- Registro de nuevos usuarios.
-- Inicio de sesión.
-- Cierre de sesión.
-- Validación de credenciales.
-
-La autenticación fue desarrollada utilizando Supabase Authentication.
-
----
-
-# 🛡️ Seguridad
-
-Se implementaron validaciones para garantizar un correcto manejo de información:
-
-- Verificación de campos obligatorios.
-- Validación del correo electrónico.
-- Control de longitud mínima de contraseña.
-- Confirmación de contraseña.
-- Restricción de acceso para usuarios no autenticados.
-
-Esto permite proteger la información almacenada de cada jugador.
-
----
-
-# 📱 Componente Login
-
-Se desarrolló la pantalla **LoginScreen**, encargada del acceso de usuarios registrados.
-
-El usuario debe ingresar:
-
-- Correo electrónico.
-- Contraseña.
-
-Proceso:
-
-1. El usuario ingresa sus credenciales.
-2. La aplicación envía la información a Supabase.
-3. Supabase valida los datos.
-4. Se permite el acceso al sistema.
-
----
-
-# 📝 Componente Registro
-
-Se creó la pantalla **RegisterScreen** para registrar nuevos jugadores.
-
-Información solicitada:
-
-- Nickname.
-- Edad.
-- Correo electrónico.
-- Contraseña.
-- Confirmación de contraseña.
-- Imagen de perfil.
-
-Se agregaron validaciones para evitar registros incorrectos.
-
----
-
-# 🧭 Navegación de la Aplicación
-
-Se implementó navegación utilizando React Navigation.
-
-## Stack Navigator
-
-Permite controlar el acceso entre:
-
-- Login.
-- Registro.
-- Pantalla principal.
-
-## Bottom Tab Navigator
-
-Permite navegar dentro de la aplicación:
-
-- Juego.
-- Puntajes.
-- Perfil.
-
----
-
-# 👤 Perfil del Jugador
-
-Se creó la pantalla **ProfileScreen**, donde el usuario puede consultar su información personal.
-
-Datos mostrados:
-
-- Nickname.
-- Edad.
-- Correo electrónico.
-- Imagen de perfil.
-
-También permite cerrar sesión de manera segura.
-
----
-
-# 🖼️ Gestión de Imágenes
-
-Se implementó la selección de imágenes mediante Expo Image Picker.
-
-El proceso realizado fue:
-
-1. El usuario selecciona una imagen desde su dispositivo.
-2. La aplicación obtiene la imagen seleccionada.
-3. La imagen puede almacenarse mediante Supabase Storage.
-4. Se guarda la referencia dentro del perfil del usuario.
-
-Bucket utilizado:
+Desarrollo de Software – Nivel 3
+Aplicaciones Móviles II
