@@ -1,98 +1,117 @@
 # 🐞 Caza Insectos
 
-Aplicación móvil desarrollada como proyecto final de **Aplicaciones Móviles II**, utilizando **React Native, Expo y TypeScript**.
+Aplicación móvil desarrollada como proyecto final para aplicar conocimientos de desarrollo de aplicaciones móviles utilizando **React Native, Expo, TypeScript y Supabase**.
 
-El proyecto consiste en un videojuego interactivo en el que el usuario debe capturar insectos para obtener puntos. La aplicación también incorpora autenticación, perfiles de usuario, clasificación de puntuaciones y almacenamiento de fotografías en la nube.
+La aplicación consiste en un videojuego interactivo en el que el jugador debe capturar insectos para obtener puntos. Además, cuenta con registro de usuarios, perfiles, clasificación de puntuaciones y almacenamiento de fotografías.
 
 ## 🚀 Tecnologías utilizadas
 
-* React Native
-* Expo
-* TypeScript
-* React Navigation
-* Supabase
-* Supabase Authentication
-* Supabase Database
-* Supabase Storage
-* Expo Image Picker
-* Expo Application Services (EAS)
+* **React Native** – Desarrollo de la aplicación móvil.
+* **Expo** – Configuración, ejecución y compilación de la aplicación.
+* **TypeScript** – Desarrollo del código.
+* **React Navigation** – Navegación entre las diferentes pantallas.
+* **Supabase** – Autenticación y almacenamiento de información.
+* **Supabase Storage** – Almacenamiento de fotografías de perfil.
+* **EAS Build** – Generación del archivo APK para Android.
 
-## 📱 Funcionalidades
+## 🎮 Funcionalidades
+
+La aplicación permite:
 
 * Registro de usuarios.
 * Inicio y cierre de sesión.
 * Selección de avatar.
-* Perfil de usuario.
-* Visualización de estadísticas.
-* Juego de captura de insectos.
-* Incremento de puntuación durante la partida.
+* Acceso al videojuego.
+* Captura de insectos.
+* Incremento de puntuación.
 * Guardado de puntuaciones.
-* Clasificación de jugadores ordenada por puntuación.
+* Visualización de la clasificación de jugadores.
+* Consulta del perfil.
+* Visualización de estadísticas.
 * Selección de fotografía desde la galería.
 * Captura de fotografía mediante la cámara.
 * Actualización de la fotografía de perfil.
 * Almacenamiento de fotografías mediante Supabase Storage.
-* Persistencia de la información del usuario.
 
-## 🎮 Funcionamiento
+## 📱 Pantallas principales
 
-El usuario inicia registrándose en la aplicación y posteriormente puede iniciar sesión. Una vez autenticado, puede acceder al juego y capturar insectos para obtener puntos.
+La aplicación cuenta principalmente con:
 
-Al finalizar la partida, la puntuación se almacena y puede consultarse en la pantalla de clasificación. Desde el perfil, el usuario puede consultar sus datos y estadísticas, además de modificar su fotografía utilizando la galería o la cámara del dispositivo.
+* **Juego:** permite capturar insectos y obtener puntuación.
+* **Puntajes:** muestra las puntuaciones de los jugadores ordenadas de mayor a menor.
+* **Perfil:** permite consultar la información, estadísticas, avatar y fotografía del usuario.
+* **Registro:** permite crear una nueva cuenta.
+* **Login:** permite iniciar sesión.
 
-## ☁️ Supabase
+## ☁️ Base de datos
 
-Utilicé Supabase como servicio backend para gestionar:
+Utilicé **Supabase** como servicio backend para gestionar la autenticación y almacenar la información de los usuarios y las puntuaciones.
 
-* Autenticación de usuarios.
-* Información de los perfiles.
-* Puntuaciones de los jugadores.
-* Fotografías de perfil mediante Supabase Storage.
+También implementé **Supabase Storage** para almacenar las fotografías de perfil seleccionadas desde la galería o tomadas mediante la cámara.
 
 ## 📦 Generación del APK
 
-Para generar la versión ejecutable de Android utilicé **Expo Application Services (EAS)**.
+Para generar la aplicación ejecutable para Android utilicé **Expo Application Services (EAS)**.
 
 ```bash
+cd "C:\Users\wfvh6\Downloads\AM2 - OnLine\app-insectos"
+
 npx expo-doctor
+
 eas login
+
 eas whoami
+
 eas build -p android --profile preview
 ```
 
 Antes de generar el APK verifiqué que el proyecto no presentara errores mediante `expo-doctor`.
 
-La compilación fue realizada mediante los servidores de Expo y se configuraron las credenciales necesarias para Android.
+El proceso de compilación fue realizado mediante los servidores de Expo, incluyendo la preparación de Android, configuración de credenciales, firma mediante Keystore y generación del APK.
 
-## 🔗 Compilación
+## 🔗 Compilación en Expo
 
-Proyecto publicado en Expo:
+La compilación del proyecto puede consultarse en:
 
 https://expo.dev/accounts/fernando6489/projects/app-insectos/builds/4b625341-53ed-46c4-b9da-fc178a3d85f2
 
+## ▶️ Ejecución del proyecto
+
+Para ejecutar el proyecto en un entorno de desarrollo:
+
+```bash
+npm install
+npx expo start
+```
+
+También se puede ejecutar en un dispositivo Android utilizando Expo.
+
 ## ✅ Pruebas realizadas
 
-Se verificaron las principales funcionalidades de la aplicación:
+Durante las pruebas finales comprobé:
 
-* Registro e inicio de sesión.
+* Registro de usuario.
+* Inicio de sesión.
 * Selección de avatar.
-* Acceso y funcionamiento del juego.
+* Acceso al juego.
 * Captura de insectos.
 * Incremento y almacenamiento de puntuaciones.
-* Visualización de clasificación.
-* Consulta de perfil y estadísticas.
-* Selección de fotografía desde galería.
-* Captura mediante cámara.
-* Actualización y almacenamiento de fotografía.
-* Cierre y nuevo inicio de sesión.
+* Visualización de la clasificación.
+* Consulta del perfil.
+* Visualización de estadísticas.
+* Selección de fotografía desde la galería.
+* Captura de fotografía con la cámara.
+* Actualización de fotografía.
+* Almacenamiento de la fotografía en Supabase Storage.
+* Cierre de sesión.
+* Nuevo inicio de sesión.
 
-## 🎯 Objetivo
+## 🎯 Objetivo del proyecto
 
-Con este proyecto apliqué de manera práctica los conocimientos adquiridos durante mi formación en desarrollo de aplicaciones móviles, integrando interfaces, navegación, autenticación, almacenamiento en la nube, interacción con el dispositivo y generación de aplicaciones para Android.
+El objetivo principal fue desarrollar una aplicación móvil funcional que permitiera aplicar los conocimientos adquiridos sobre **TypeScript, Hooks, navegación, autenticación, almacenamiento en la nube, integración con dispositivos móviles y generación de aplicaciones Android**.
 
 ## 👨‍💻 Autor
 
 **Wladimir Vega Herrera**
 
-Desarrollo de Software – Nivel 3
-Aplicaciones Móviles II
+Proyecto académico – Desarrollo de Aplicaciones Móviles
